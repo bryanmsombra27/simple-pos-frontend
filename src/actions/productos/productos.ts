@@ -1,0 +1,61 @@
+import { makeApiRequest } from "#lib/data-fetch";
+import type {
+  Producto,
+  ProductoForm,
+  ProductoResponse,
+  ProductosFindAllResponse,
+} from "../../interfaces/producto";
+
+export const getProductsAction =
+  async (): Promise<ProductosFindAllResponse> => {
+    const data = await makeApiRequest<ProductosFindAllResponse>({
+      url: "producto",
+    });
+
+    return data;
+  };
+
+export const getProductAction = async (
+  productoId: string,
+): Promise<Producto> => {
+  const data = await makeApiRequest<Producto>({
+    url: `producto/${productoId}`,
+  });
+
+  return data;
+};
+
+export const createProductAction = async (
+  formData: FormData,
+): Promise<ProductoResponse> => {
+  const data = await makeApiRequest<ProductoResponse>({
+    url: "producto",
+    body: formData,
+    method: "POST",
+    contentType: "FormData",
+  });
+
+  return data;
+};
+export const updateProductAction = async (
+  id: string,
+  producto: ProductoForm,
+): Promise<ProductoResponse> => {
+  const data = await makeApiRequest<ProductoResponse>({
+    url: `producto/${id}`,
+    body: producto,
+    method: "PATCH",
+  });
+
+  return data;
+};
+export const deleteProductAction = async (
+  id: string,
+): Promise<ProductoResponse> => {
+  const data = await makeApiRequest<ProductoResponse>({
+    url: `producto/${id}`,
+    method: "DELETE",
+  });
+
+  return data;
+};

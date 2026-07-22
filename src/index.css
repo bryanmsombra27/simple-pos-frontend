@@ -133,3 +133,10 @@
     @apply font-sans;
   }
 }
+
+.file-upload {
+  height: 120px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

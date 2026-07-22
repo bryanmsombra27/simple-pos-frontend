@@ -1,0 +1,54 @@
+type RequestMethods = "POST" | "DELETE" | "GET" | "PATCH" | "PUT";
+
+interface RequestOptions {
+  url: string;
+  method?: RequestMethods;
+  body?: any;
+  token?: string;
+  contentType?: "application/json" | "FormData";
+}
+
+export async function makeApiRequest<T>(options: RequestOptions): Promise<T> {
+  const {
+    url,
+    body,
+    token = "",
+    method = "GET",
+    contentType = "application/json",
+  } = options;
+
+  const headers = new Headers();
+  let optionRequest: RequestInit = {
+    headers,
+  };
+  optionRequest.method = method;
+
+  if (
+    method != "GET" &&
+    method != "DELETE" &&
+    body &&
+    contentType == "application/json"
+  ) {
+    headers.append("Content-Type", "application/json");
+    optionRequest.body = JSON.stringify(body);
+  } else {
+    optionRequest.body = body;
+  }
+
+  if (token) {
+    headers.append("Authorization", `Bearer ${token}`);
+  }
+  //    const searchParams = new URLSearchParams();
+
+  //   if (pagination?.page) {
+  //     searchParams.append("page", pagination.page.toString());
+  //   }
+
+  const request = await fetch(
+    `${import.meta.env.VITE_API_URL}/${url}`,
+    optionRequest,
+  );
+  const data = await request.json();
+
+  return data;
+}

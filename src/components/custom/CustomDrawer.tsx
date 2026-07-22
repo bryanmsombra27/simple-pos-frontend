@@ -3,14 +3,8 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerSwipeHandle,
   DrawerTrigger,
 } from "#components/ui/drawer";
-import { Button } from "#components/ui/button";
 import { MenuIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
@@ -29,10 +23,10 @@ const CustomDrawer: FC<CustomDrawerProps> = ({}) => {
         <nav className="flex flex-col p-4 gap-5">
           <DrawerClose className="text-left">
             <Link
-              to="/"
+              to="/productos"
               className="[&.active]:font-bold"
             >
-              Home
+              Productos
             </Link>
           </DrawerClose>
 

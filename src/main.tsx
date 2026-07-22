@@ -6,6 +6,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { getRouter } from "./router";
+import { Toaster } from "sonner";
 
 // Create a new router instance
 const router = getRouter();
@@ -22,6 +23,10 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
+      <Toaster
+        position="top-right"
+        duration={1500}
+      />
       <RouterProvider router={router} />
     </StrictMode>,
   );
