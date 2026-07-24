@@ -29,13 +29,15 @@ const CustomDrawer: FC<CustomDrawerProps> = ({}) => {
               Productos
             </Link>
           </DrawerClose>
-
-          <Link
-            to="/about"
-            className="[&.active]:font-bold"
-          >
-            About
-          </Link>
+          <DrawerClose className="text-left">
+            <Link
+              search={{ page: 1, search: "" }}
+              to="/mostrador"
+              className="[&.active]:font-bold"
+            >
+              Mostrador
+            </Link>
+          </DrawerClose>
         </nav>
       </DrawerContent>
     </Drawer>

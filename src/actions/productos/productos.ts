@@ -5,15 +5,21 @@ import type {
   ProductoResponse,
   ProductosFindAllResponse,
 } from "../../interfaces/producto";
+type Pagination = {
+  search: string;
+  page: number;
+};
 
-export const getProductsAction =
-  async (): Promise<ProductosFindAllResponse> => {
-    const data = await makeApiRequest<ProductosFindAllResponse>({
-      url: "producto",
-    });
+export const getProductsAction = async (
+  pagination?: Pagination,
+): Promise<ProductosFindAllResponse> => {
+  const data = await makeApiRequest<ProductosFindAllResponse>({
+    url: "producto",
+    searchParams: pagination,
+  });
 
-    return data;
-  };
+  return data;
+};
 
 export const getProductAction = async (
   productoId: string,

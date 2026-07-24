@@ -107,6 +107,7 @@ function Productos() {
     console.log(file, "ARCHIVO SUBIDO");
     setFile(file);
   };
+
   return (
     <>
       <div className="container px-10 py-5">

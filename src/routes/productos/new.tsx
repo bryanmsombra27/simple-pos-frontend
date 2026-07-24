@@ -52,7 +52,7 @@ export const Route = createFileRoute("/productos/new")({
 });
 
 function Productos() {
-  const { mutateAsync } = useCreateProduct();
+  const { mutateAsync, isPending } = useCreateProduct();
   const [file, setFile] = useState<File | null>(null);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -116,6 +116,8 @@ function Productos() {
 
           <Button
             type="button"
+            className={`disabled:${isPending}`}
+            disabled={isPending}
             onClick={() => handleSubmit(submit)()}
           >
             <Save />
