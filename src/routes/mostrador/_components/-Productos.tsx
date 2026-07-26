@@ -17,7 +17,7 @@ interface ProductosProps {
   productos: Producto[];
 }
 const Productos: FC<ProductosProps> = ({ productos }) => {
-  const { addProduct } = usecartStore();
+  const addProduct = usecartStore((state) => state.addProduct);
 
   return (
     <>
@@ -44,6 +44,7 @@ const Productos: FC<ProductosProps> = ({ productos }) => {
               <Button
                 className="w-full"
                 onClick={() => {
+                  console.log("Entra aqui", producto);
                   addProduct(producto);
                 }}
               >

@@ -2,10 +2,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Producto } from "../interfaces/producto";
 
-interface CarritoCompras {
-  producto_id: string;
+interface CarritoCompras extends Producto {
   cantidad: number;
-  precio: number;
 }
 
 interface InitialState {
@@ -26,60 +24,53 @@ export const usecartStore = create<State>()(
     (set, get) => ({
       productos: [],
       removeProduct: (id) => {
-        const carrito = get().productos;
-
-        set({
-          productos: carrito.map((p) => {
-            if (p.producto_id == id && p.cantidad > 1) {
+        set((state) => ({
+          productos: state.productos.map((p) => {
+            if (p.id == id && p.cantidad > 1) {
               return {
                 ...p,
                 cantidad: p.cantidad - 1,
               };
             } else return p;
           }),
-        });
+        }));
       },
       addProduct: (producto) => {
         const carrito = get().productos;
 
-        const productoAgregado = carrito.some(
-          (p) => p.producto_id == producto.id,
-        );
+        const productoAgregado = carrito.some((p) => p.id == producto.id);
         if (productoAgregado) {
-          set({
-            productos: carrito.map((p) => {
-              if (p.producto_id == producto.id) {
+          set((state) => ({
+            productos: state.productos.map((p) => {
+              if (p.id == producto.id) {
                 return {
                   ...p,
                   cantidad: p.cantidad + 1,
                 };
               } else return p;
             }),
-          });
+          }));
         } else {
-          set({
+          set((state) => ({
             productos: [
-              ...carrito,
+              ...state.productos,
               {
-                producto_id: producto.id,
+                ...producto,
                 cantidad: 1,
-                precio: producto.precio,
               },
             ],
-          });
+          }));
         }
       },
       clearCart: () => {
-        set({
+        set(() => ({
           productos: [],
-        });
+        }));
       },
       removeProductFromCart: (id) => {
-        const carrito = get().productos;
-
-        set({
-          productos: carrito.filter((producto) => producto.producto_id != id),
-        });
+        set((state) => ({
+          productos: state.productos.filter((producto) => producto.id != id),
+        }));
       },
     }),
     { name: "cart" },

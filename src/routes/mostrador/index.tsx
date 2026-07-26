@@ -1,7 +1,7 @@
 import { SearchIcon, ShoppingCartIcon } from "lucide-react";
 import { Field, FieldLabel } from "#components/ui/field";
 
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   BarcodeFormat,
   BarcodeScanner,
@@ -14,20 +14,24 @@ import {
   InputGroupInput,
 } from "#components/ui/input-group";
 import { useRef, useState } from "react";
-import Productos from "./_components/Productos";
+import Productos from "./_components/-Productos";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getProductsAction } from "../../actions/productos/productos";
 import { usecartStore } from "../../store/cart";
+import { useShallow } from "zustand/react/shallow";
+
+import * as z from "zod";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "#components/ui/drawer";
-
-import * as z from "zod";
+import CarritoProducto from "./_components/-Carrito_Producto";
 
 type SearchingParams = {
   page: number;
@@ -59,10 +63,12 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/mostrador/")({
   component: Mostrador,
-  loaderDeps: ({ search }) => search,
+  loaderDeps: ({ search }) => ({
+    page: search.page,
+    search: search.search,
+  }),
   validateSearch: searchSchema,
   loader: ({ context, deps }) => {
-    console.log(deps, "DEPS");
     return context.queryClient.ensureQueryData(productosQueryOptions(deps));
   },
 });
@@ -72,10 +78,13 @@ function Mostrador() {
   // const inputRef = useRef<HTMLInputElement>(null);
   const { data } = useSuspenseQuery(productosQueryOptions(search));
 
-  const navigate = useNavigate();
+  const navigate = Route.useNavigate();
   // const [open, setOpen] = useState<boolean>(false);
-
-  const cantidadProductos = usecartStore((state) => state.productos.length);
+  const productos = usecartStore(useShallow((state) => state.productos));
+  const cantidadProductos = productos.reduce(
+    (acc, item) => acc + item.cantidad,
+    0,
+  );
 
   const scanner = (barcode: DetectedBarcode[]) => {
     console.log("Entra", barcode);
@@ -131,10 +140,11 @@ function Mostrador() {
             <InputGroupInput
               // ref={inputRef}
               onChange={(e) => {
-                if (e.target.value.length <= 0) {
+                if (e.target.value.length == 0) {
                   // inputRef.current!.value = "";
                   navigate({
-                    from: Route.fullPath,
+                    // from: Route.fullPath,
+                    to: ".",
                     search: (prev) => ({
                       ...prev,
                       search: e.target.value ?? "",
@@ -145,10 +155,9 @@ function Mostrador() {
 
                 if (e.target.value.length > 2) {
                   navigate({
-                    from: Route.fullPath,
+                    // from: Route.fullPath,
+                    to: ".",
                     search: (prev) => {
-                      console.log(prev, "CONSOLA");
-
                       return {
                         ...prev,
                         search: e.target.value ?? "",
@@ -169,11 +178,7 @@ function Mostrador() {
           <span className="absolute -top-5 left-3 rounded-full bg-amber-500 p-1 text-white ">
             {cantidadProductos}
           </span>
-          {/* <Drawer
-            open={open}
-            onOpenChange={setOpen}
-            swipeDirection={"right"}
-          >
+          <Drawer swipeDirection="right">
             <DrawerTrigger>
               <ShoppingCartIcon className="cursor-pointer" />
             </DrawerTrigger>
@@ -181,11 +186,13 @@ function Mostrador() {
               <DrawerHeader>
                 <DrawerTitle>Carrito de Compras</DrawerTitle>
                 <DrawerDescription>
-                  Aquí se muestran los árticulos que se llevara el cliente.
+                  Aquí se muestran los productos que serán adquiridos por el
+                  cliente
                 </DrawerDescription>
               </DrawerHeader>
+              <CarritoProducto />
             </DrawerContent>
-          </Drawer> */}
+          </Drawer>
         </div>
       </div>
 
