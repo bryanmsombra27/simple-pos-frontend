@@ -2,13 +2,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { updateProductAction } from "../../actions/productos/productos";
 import type {
-  ProductoForm,
   ProductoResponse,
   ProductosFindAllResponse,
 } from "../../interfaces/producto";
 import { useNavigate } from "@tanstack/react-router";
 type MutationBody = {
-  producto: ProductoForm;
+  producto: FormData;
   id: string;
 };
 

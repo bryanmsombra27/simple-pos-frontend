@@ -1,7 +1,6 @@
 import { makeApiRequest } from "#lib/data-fetch";
 import type {
   Producto,
-  ProductoForm,
   ProductoResponse,
   ProductosFindAllResponse,
 } from "../../interfaces/producto";
@@ -45,12 +44,13 @@ export const createProductAction = async (
 };
 export const updateProductAction = async (
   id: string,
-  producto: ProductoForm,
+  producto: FormData,
 ): Promise<ProductoResponse> => {
   const data = await makeApiRequest<ProductoResponse>({
     url: `producto/${id}`,
     body: producto,
     method: "PATCH",
+    contentType: "FormData",
   });
 
   return data;

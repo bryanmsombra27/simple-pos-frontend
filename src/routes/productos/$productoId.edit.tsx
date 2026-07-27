@@ -27,6 +27,15 @@ import BarcodeScannerModal from "#components/custom/BarcodeScannerModal";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getProductAction } from "../../actions/productos/productos";
 import useUpdateProduct from "../../hooks/productos/useUpdateProduct";
+import {
+  Attachment,
+  AttachmentAction,
+  AttachmentActions,
+  AttachmentContent,
+  AttachmentDescription,
+  AttachmentMedia,
+  AttachmentTitle,
+} from "#components/ui/attachment";
 
 const zodSchema = z.object({
   precio: z.coerce.number().positive(),
@@ -34,6 +43,7 @@ const zodSchema = z.object({
   codigo_barras: z.string(),
   descripcion: z.string().optional(),
   almacen: z.coerce.number().positive(),
+  file: z.file().optional(),
 });
 type FormValues = z.input<typeof zodSchema>;
 type FormData = z.output<typeof zodSchema>;
@@ -65,7 +75,7 @@ function Productos() {
   const [file, setFile] = useState<File | null>(null);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
-  const { reset, handleSubmit, register, setValue } = useForm<
+  const { reset, handleSubmit, register, setValue, getValues } = useForm<
     FormValues,
     undefined,
     FormData
@@ -92,11 +102,24 @@ function Productos() {
   }, [producto, reset]);
 
   const submit = async (form: FormData) => {
-    try {
-      await mutateAsync({ id: productoId, producto: form });
+    const formData = new FormData();
 
-      // setTimeout(() => {
-      // }, 1000);
+    for (const [key, value] of Object.entries(form)) {
+      if (key == "file") {
+        const file = getValues("file") as File;
+        if (file) {
+          formData.append("file", file, file.name);
+        }
+      } else {
+        formData.append(key, value.toString());
+      }
+    }
+
+    try {
+      console.log(formData.get("file"), "FORMDATA WITH FILE");
+      console.log(formData.get("precio"), "FORMDATA WITH PRICE");
+      console.log(formData.get("nombre"), "FORMDATA WITH NAME");
+      await mutateAsync({ id: productoId, producto: formData });
     } catch (error) {
       reset();
     } finally {
@@ -104,7 +127,9 @@ function Productos() {
   };
 
   const handleChange = (file: any) => {
-    console.log(file, "ARCHIVO SUBIDO");
+    if (file) {
+      setValue("file", file);
+    }
     setFile(file);
   };
 
@@ -226,11 +251,43 @@ function Productos() {
               <FileUploader
                 classes="file-upload"
                 handleChange={handleChange}
-                name="file"
                 types={fileTypes}
+                {...register("file")}
               />
             </div>
-
+            {(file || producto) && (
+              <Attachment
+                orientation="vertical"
+                className="w-full mt-5"
+              >
+                <AttachmentMedia variant="image">
+                  <img
+                    src={file ? URL.createObjectURL(file) : producto.imagen}
+                    alt={file?.name}
+                    className="object-cover bg-center"
+                  />
+                </AttachmentMedia>
+                <AttachmentContent>
+                  <AttachmentTitle>{file?.name}</AttachmentTitle>
+                  {file && (
+                    <AttachmentDescription>
+                      {file.type} · {file.size / 1024} MB
+                    </AttachmentDescription>
+                  )}
+                </AttachmentContent>
+                <AttachmentActions>
+                  <AttachmentAction
+                    aria-label="Remove sales-dashboard.pdf"
+                    onClick={() => {
+                      setValue("file", undefined);
+                      setFile(null);
+                    }}
+                  >
+                    <XIcon />
+                  </AttachmentAction>
+                </AttachmentActions>
+              </Attachment>
+            )}
             {/* <p>{file ? `File name: ${file[0].name}` : "no files uploaded yet"}</p> */}
           </div>
         </div>

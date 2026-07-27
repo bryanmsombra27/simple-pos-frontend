@@ -226,7 +226,7 @@ function Productos() {
             {file && (
               <Attachment
                 orientation="vertical"
-                className="w-full"
+                className="w-full mt-5"
               >
                 <AttachmentMedia variant="image">
                   <img
