@@ -13,7 +13,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "#components/ui/input-group";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Productos from "./_components/-Productos";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getProductsAction } from "../../actions/productos/productos";
@@ -23,15 +23,14 @@ import { useShallow } from "zustand/react/shallow";
 import * as z from "zod";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "#components/ui/drawer";
 import CarritoProducto from "./_components/-Carrito_Producto";
+import useGetProduct from "../../hooks/productos/useGetProduct";
 
 type SearchingParams = {
   page: number;
@@ -75,97 +74,77 @@ export const Route = createFileRoute("/mostrador/")({
 
 function Mostrador() {
   const search = Route.useSearch();
-  // const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { data } = useSuspenseQuery(productosQueryOptions(search));
-
   const navigate = Route.useNavigate();
-  // const [open, setOpen] = useState<boolean>(false);
+  const [barcodeScan, setBarcdeScan] = useState<string>("");
   const productos = usecartStore(useShallow((state) => state.productos));
+  const addProduct = usecartStore(useShallow((state) => state.addProduct));
   const cantidadProductos = productos.reduce(
     (acc, item) => acc + item.cantidad,
     0,
   );
+  const { data: producto } = useGetProduct(barcodeScan);
 
   const scanner = (barcode: DetectedBarcode[]) => {
-    console.log("Entra", barcode);
     if (barcode.length > 0) {
+      setBarcdeScan(barcode[0].rawValue);
     }
   };
+  useEffect(() => {
+    if (producto && producto.id) {
+      addProduct(producto);
+    }
+    setBarcdeScan("");
+  }, [producto]);
 
-  // const hangleSearch = () => {
-  //   if (inputRef.current?.value.length! <= 0) {
-  //     inputRef.current!.value = "";
-  //     navigate({
-  //       from: Route.fullPath,
-  //       search: (prev) => ({
-  //         ...prev,
-  //         search: inputRef.current?.value ?? "",
-  //       }),
-  //     });
-  //     return;
-  //   }
+  const hangleSearch = () => {
+    if (inputRef.current?.value.length! == 0) {
+      inputRef.current!.value = "";
+      navigate({
+        from: Route.fullPath,
+        search: (prev) => ({
+          ...prev,
+          search: inputRef.current?.value ?? "",
+        }),
+      });
+      return;
+    }
 
-  //   if (inputRef.current?.value.length! > 2) {
-  //     navigate({
-  //       from: Route.fullPath,
-  //       search: (prev) => {
-  //         console.log(prev, "CONSOLA");
-
-  //         return {
-  //           ...prev,
-  //           search: inputRef.current?.value ?? "",
-  //         };
-  //       },
-  //     });
-  //   }
-  // };
+    if (inputRef.current?.value.length! > 2) {
+      navigate({
+        from: Route.fullPath,
+        search: (prev) => {
+          return {
+            ...prev,
+            search: inputRef.current?.value ?? "",
+          };
+        },
+      });
+    }
+  };
 
   return (
     <div className="p-10">
       <div className="flex gap-5 items-center w-full justify-center my-10">
         <div className="h-32 w-28">
-          {/* {data && (
+          {data && (
             <BarcodeScanner
               onCapture={scanner}
+              // hidden={open}
               options={{
                 formats,
-                delay: 100,
+                delay: 1000,
               }}
             />
-          )} */}
+          )}
         </div>
         <Field className="max-w-sm">
           <FieldLabel>Búsqueda de Producto</FieldLabel>
           <InputGroup>
             <InputGroupInput
-              // ref={inputRef}
-              onChange={(e) => {
-                if (e.target.value.length == 0) {
-                  // inputRef.current!.value = "";
-                  navigate({
-                    // from: Route.fullPath,
-                    to: ".",
-                    search: (prev) => ({
-                      ...prev,
-                      search: e.target.value ?? "",
-                    }),
-                  });
-                  return;
-                }
-
-                if (e.target.value.length > 2) {
-                  navigate({
-                    // from: Route.fullPath,
-                    to: ".",
-                    search: (prev) => {
-                      return {
-                        ...prev,
-                        search: e.target.value ?? "",
-                      };
-                    },
-                  });
-                }
-              }}
+              ref={inputRef}
+              onChange={hangleSearch}
               placeholder="Buscar un producto..."
             />
             <InputGroupAddon align="inline-start">

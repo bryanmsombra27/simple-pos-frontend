@@ -4,7 +4,6 @@ import {
   AttachmentAction,
   AttachmentActions,
   AttachmentContent,
-  AttachmentDescription,
   AttachmentMedia,
   AttachmentTitle,
 } from "#components/ui/attachment";
@@ -102,7 +101,13 @@ const CarritoProducto: FC<CarritoProductoProps> = ({}) => {
         <div className="flex flex-col w-90 mx-auto gap-5">
           <div className="flex justify-between mx-5">
             <span>Total a pagar:</span>
-            <span>{total}</span>
+            <span>
+              {Intl.NumberFormat("es-MX", {
+                currency: "MXN",
+                style: "currency",
+                minimumFractionDigits: 2,
+              }).format(total)}
+            </span>
           </div>
 
           <Button

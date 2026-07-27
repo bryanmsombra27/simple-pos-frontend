@@ -6,6 +6,7 @@ import { Button } from "#components/ui/button";
 import {
   Card,
   CardAction,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -24,7 +25,7 @@ const Productos: FC<ProductosProps> = ({ productos }) => {
       <div className="grid grid-cols-4 gap-10">
         {productos.map((producto) => (
           <Card
-            className="relative mx-auto w-full max-w-sm pt-0"
+            className="relative mx-auto w-full max-w-sm pt-0 flex flex-col justify-between"
             key={producto.id}
           >
             <div className="absolute inset-0 z-30 aspect-video " />
@@ -40,9 +41,21 @@ const Productos: FC<ProductosProps> = ({ productos }) => {
               <CardTitle>{producto.nombre}</CardTitle>
               <CardDescription>{producto.descripcion}</CardDescription>
             </CardHeader>
+
+            <CardContent>
+              <p>En Almacen: {producto.stock.cantidad}</p>
+              <p className="mt-5">
+                Precio:{" "}
+                {Intl.NumberFormat("es-MX", {
+                  currency: "MXN",
+                  style: "currency",
+                  minimumFractionDigits: 2,
+                }).format(producto.precio)}
+              </p>
+            </CardContent>
             <CardFooter>
               <Button
-                className="w-full"
+                className="w-full "
                 onClick={() => {
                   console.log("Entra aqui", producto);
                   addProduct(producto);
