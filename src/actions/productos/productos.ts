@@ -1,13 +1,10 @@
 import { makeApiRequest } from "#lib/data-fetch";
+import type { Pagination } from "../../interfaces/common";
 import type {
   Producto,
   ProductoResponse,
   ProductosFindAllResponse,
 } from "../../interfaces/producto";
-type Pagination = {
-  search: string;
-  page: number;
-};
 
 export const getProductsAction = async (
   pagination?: Pagination,

@@ -38,6 +38,14 @@ const CustomDrawer: FC<CustomDrawerProps> = ({}) => {
               Mostrador
             </Link>
           </DrawerClose>
+          <DrawerClose className="text-left">
+            <Link
+              to="/ventas"
+              className="[&.active]:font-bold"
+            >
+              Ventas
+            </Link>
+          </DrawerClose>
         </nav>
       </DrawerContent>
     </Drawer>

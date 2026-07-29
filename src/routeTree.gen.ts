@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VentasIndexRouteImport } from './routes/ventas/index'
 import { Route as ProductosIndexRouteImport } from './routes/productos/index'
 import { Route as MostradorIndexRouteImport } from './routes/mostrador/index'
 import { Route as ProductosNewRouteImport } from './routes/productos/new'
@@ -18,6 +19,11 @@ import { Route as ProductosProductoIdEditRouteImport } from './routes/productos/
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VentasIndexRoute = VentasIndexRouteImport.update({
+  id: '/ventas/',
+  path: '/ventas/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductosIndexRoute = ProductosIndexRouteImport.update({
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/productos/new': typeof ProductosNewRoute
   '/mostrador/': typeof MostradorIndexRoute
   '/productos/': typeof ProductosIndexRoute
+  '/ventas/': typeof VentasIndexRoute
   '/productos/$productoId/edit': typeof ProductosProductoIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/productos/new': typeof ProductosNewRoute
   '/mostrador': typeof MostradorIndexRoute
   '/productos': typeof ProductosIndexRoute
+  '/ventas': typeof VentasIndexRoute
   '/productos/$productoId/edit': typeof ProductosProductoIdEditRoute
 }
 export interface FileRoutesById {
@@ -61,6 +69,7 @@ export interface FileRoutesById {
   '/productos/new': typeof ProductosNewRoute
   '/mostrador/': typeof MostradorIndexRoute
   '/productos/': typeof ProductosIndexRoute
+  '/ventas/': typeof VentasIndexRoute
   '/productos/$productoId/edit': typeof ProductosProductoIdEditRoute
 }
 export interface FileRouteTypes {
@@ -70,6 +79,7 @@ export interface FileRouteTypes {
     | '/productos/new'
     | '/mostrador/'
     | '/productos/'
+    | '/ventas/'
     | '/productos/$productoId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -77,6 +87,7 @@ export interface FileRouteTypes {
     | '/productos/new'
     | '/mostrador'
     | '/productos'
+    | '/ventas'
     | '/productos/$productoId/edit'
   id:
     | '__root__'
@@ -84,6 +95,7 @@ export interface FileRouteTypes {
     | '/productos/new'
     | '/mostrador/'
     | '/productos/'
+    | '/ventas/'
     | '/productos/$productoId/edit'
   fileRoutesById: FileRoutesById
 }
@@ -92,6 +104,7 @@ export interface RootRouteChildren {
   ProductosNewRoute: typeof ProductosNewRoute
   MostradorIndexRoute: typeof MostradorIndexRoute
   ProductosIndexRoute: typeof ProductosIndexRoute
+  VentasIndexRoute: typeof VentasIndexRoute
   ProductosProductoIdEditRoute: typeof ProductosProductoIdEditRoute
 }
 
@@ -102,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ventas/': {
+      id: '/ventas/'
+      path: '/ventas'
+      fullPath: '/ventas/'
+      preLoaderRoute: typeof VentasIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/productos/': {
@@ -140,6 +160,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductosNewRoute: ProductosNewRoute,
   MostradorIndexRoute: MostradorIndexRoute,
   ProductosIndexRoute: ProductosIndexRoute,
+  VentasIndexRoute: VentasIndexRoute,
   ProductosProductoIdEditRoute: ProductosProductoIdEditRoute,
 }
 export const routeTree = rootRouteImport

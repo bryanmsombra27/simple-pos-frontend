@@ -1,6 +1,6 @@
 import { Button } from "#components/ui/button";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Barcode, EditIcon, FileTextIcon, XIcon } from "lucide-react";
+import { Barcode, EditIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,13 +36,18 @@ import {
   AttachmentMedia,
   AttachmentTitle,
 } from "#components/ui/attachment";
+import ValidationMessage from "#components/custom/ValidationMessage";
 
 const zodSchema = z.object({
-  precio: z.coerce.number().positive(),
-  nombre: z.string(),
-  codigo_barras: z.string(),
+  precio: z.coerce
+    .number("El precio es requerido")
+    .positive("Debe ser un número mayor a 0"),
+  nombre: z.string().nonempty("El campo es requerido"),
+  codigo_barras: z.string().nonempty("El campo es requerido"),
   descripcion: z.string().optional(),
-  almacen: z.coerce.number().positive(),
+  almacen: z.coerce
+    .number("La cantidad para guardar en almacen es requerida")
+    .positive("Debe de ser un número mayor a 0"),
   file: z.file().optional(),
 });
 type FormValues = z.input<typeof zodSchema>;
@@ -75,11 +80,14 @@ function Productos() {
   const [file, setFile] = useState<File | null>(null);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
-  const { reset, handleSubmit, register, setValue, getValues } = useForm<
-    FormValues,
-    undefined,
-    FormData
-  >({
+  const {
+    reset,
+    handleSubmit,
+    register,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm<FormValues, undefined, FormData>({
     resolver: zodResolver(zodSchema),
     defaultValues: {
       nombre: producto.nombre,
@@ -116,9 +124,6 @@ function Productos() {
     }
 
     try {
-      console.log(formData.get("file"), "FORMDATA WITH FILE");
-      console.log(formData.get("precio"), "FORMDATA WITH PRICE");
-      console.log(formData.get("nombre"), "FORMDATA WITH NAME");
       await mutateAsync({ id: productoId, producto: formData });
     } catch (error) {
       reset();
@@ -175,6 +180,9 @@ function Productos() {
                     type="text"
                     {...register("nombre", { required: true })}
                   />
+                  {errors.nombre && (
+                    <ValidationMessage message={errors.nombre.message!} />
+                  )}
                 </Field>
               </FieldGroup>
               <FieldGroup className="m-2">
@@ -185,6 +193,10 @@ function Productos() {
                     type="number"
                     {...register("precio", { required: true })}
                   />
+
+                  {errors.precio && (
+                    <ValidationMessage message={errors.precio.message!} />
+                  )}
                 </Field>
               </FieldGroup>
 
@@ -219,6 +231,12 @@ function Productos() {
                       /> */}
                     </InputGroupAddon>
                   </InputGroup>
+
+                  {errors.codigo_barras && (
+                    <ValidationMessage
+                      message={errors.codigo_barras.message!}
+                    />
+                  )}
                 </Field>
               </FieldGroup>
               <FieldGroup className="m-2">
@@ -230,6 +248,9 @@ function Productos() {
                     min={1}
                     {...register("almacen", { required: true })}
                   />
+                  {errors.almacen && (
+                    <ValidationMessage message={errors.almacen.message!} />
+                  )}
                 </Field>
               </FieldGroup>
 

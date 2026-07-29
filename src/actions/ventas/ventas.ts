@@ -1,5 +1,10 @@
 import { makeApiRequest } from "#lib/data-fetch";
-import type { ProductoVendido, VentaResponse } from "../../interfaces/venta";
+import type { Pagination } from "../../interfaces/common";
+import type {
+  ProductoVendido,
+  VentaResponse,
+  VentasFindAllResponse,
+} from "../../interfaces/venta";
 
 export const createSaleAction = async (
   productoIds: string[],
@@ -12,6 +17,17 @@ export const createSaleAction = async (
       productos,
       productoIds,
     },
+  });
+
+  return data;
+};
+
+export const getSalesAction = async (
+  pagination?: Pagination,
+): Promise<VentasFindAllResponse> => {
+  const data = await makeApiRequest<VentasFindAllResponse>({
+    url: "ordenes",
+    searchParams: pagination,
   });
 
   return data;

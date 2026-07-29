@@ -120,7 +120,7 @@ export function CustomTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={columns?.length ?? 0}
                   className="h-24 text-center"
                 >
                   No results.

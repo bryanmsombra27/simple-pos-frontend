@@ -34,13 +34,18 @@ import {
   InputGroupInput,
 } from "#components/ui/input-group";
 import BarcodeScannerModal from "#components/custom/BarcodeScannerModal";
+import ValidationMessage from "#components/custom/ValidationMessage";
 
 const zodSchema = z.object({
-  precio: z.coerce.number().positive(),
-  nombre: z.string(),
-  codigo_barras: z.string(),
+  precio: z.coerce
+    .number("El precio es requerido")
+    .positive("Debe ser un número mayor a 0"),
+  nombre: z.string().nonempty("El campo es requerido"),
+  codigo_barras: z.string().nonempty("El campo es requerido"),
   descripcion: z.string().optional(),
-  almacen: z.coerce.number().positive(),
+  almacen: z.coerce
+    .number("La cantidad para guardar en almacen es requerida")
+    .positive("Debe de ser un número mayor a 0"),
   file: z.file().optional(),
 });
 type FormValues = z.input<typeof zodSchema>;
@@ -57,11 +62,14 @@ function Productos() {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const { reset, handleSubmit, register, setValue, getValues } = useForm<
-    FormValues,
-    undefined,
-    FormData
-  >({
+  const {
+    reset,
+    handleSubmit,
+    register,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm<FormValues, undefined, FormData>({
     resolver: zodResolver(zodSchema),
   });
 
@@ -143,6 +151,9 @@ function Productos() {
                     type="text"
                     {...register("nombre", { required: true })}
                   />
+                  {errors.nombre && (
+                    <ValidationMessage message={errors.nombre.message!} />
+                  )}
                 </Field>
               </FieldGroup>
               <FieldGroup className="m-2">
@@ -153,6 +164,10 @@ function Productos() {
                     type="number"
                     {...register("precio", { required: true })}
                   />
+
+                  {errors.precio && (
+                    <ValidationMessage message={errors.precio.message!} />
+                  )}
                 </Field>
               </FieldGroup>
 
@@ -187,6 +202,11 @@ function Productos() {
                       /> */}
                     </InputGroupAddon>
                   </InputGroup>
+                  {errors.codigo_barras && (
+                    <ValidationMessage
+                      message={errors.codigo_barras.message!}
+                    />
+                  )}
                 </Field>
               </FieldGroup>
               <FieldGroup className="m-2">
@@ -198,6 +218,9 @@ function Productos() {
                     min={1}
                     {...register("almacen", { required: true })}
                   />
+                  {errors.almacen && (
+                    <ValidationMessage message={errors.almacen.message!} />
+                  )}
                 </Field>
               </FieldGroup>
 

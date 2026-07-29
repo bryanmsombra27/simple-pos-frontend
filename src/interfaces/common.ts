@@ -8,3 +8,7 @@ export interface CommonFindAllResponse {
   pagina: number;
   total_paginas: number;
 }
+export type Pagination = {
+  search: string;
+  page: number;
+};
