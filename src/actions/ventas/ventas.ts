@@ -3,6 +3,7 @@ import type { Pagination } from "../../interfaces/common";
 import type {
   ProductoVendido,
   VentaResponse,
+  VentasEarningsResponse,
   VentasFindAllResponse,
 } from "../../interfaces/venta";
 
@@ -28,6 +29,14 @@ export const getSalesAction = async (
   const data = await makeApiRequest<VentasFindAllResponse>({
     url: "ordenes",
     searchParams: pagination,
+  });
+
+  return data;
+};
+
+export const getEarningsAction = async (): Promise<VentasEarningsResponse> => {
+  const data = await makeApiRequest<VentasEarningsResponse>({
+    url: "ordenes/earnings",
   });
 
   return data;

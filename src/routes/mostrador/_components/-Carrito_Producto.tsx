@@ -13,6 +13,7 @@ import { useShallow } from "zustand/react/shallow";
 import { Button } from "#components/ui/button";
 import type { ProductoVendido } from "../../../interfaces/venta";
 import useCreateVenta from "../../../hooks/ventas/useCreateVenta";
+import { BlockChain } from "../../../lib/utils";
 
 interface CarritoProductoProps {}
 const CarritoProducto: FC<CarritoProductoProps> = ({}) => {
@@ -101,13 +102,7 @@ const CarritoProducto: FC<CarritoProductoProps> = ({}) => {
         <div className="flex flex-col w-90 mx-auto gap-5">
           <div className="flex justify-between mx-5">
             <span>Total a pagar:</span>
-            <span>
-              {Intl.NumberFormat("es-MX", {
-                currency: "MXN",
-                style: "currency",
-                minimumFractionDigits: 2,
-              }).format(total)}
-            </span>
+            <span>{BlockChain.currency(total)}</span>
           </div>
 
           <Button

@@ -1,9 +1,12 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { getProductsAction } from "../../actions/productos/productos";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Producto } from "../../interfaces/producto";
 import { CustomTable } from "#components/custom/CustomTable";
+import { BlockChain } from "../../lib/utils";
+import { Dialog as Dialogo } from "@base-ui/react/dialog";
+import DeleteProductModal from "./_components/-DeleteProductModal";
 
 const productosQuery = queryOptions({
   queryKey: ["productos"],
@@ -32,12 +35,7 @@ const columns: ColumnDef<Producto>[] = [
   },
   {
     header: "Precio del producto",
-    accessorFn: ({ precio }) =>
-      Intl.NumberFormat("es-MX", {
-        currency: "MXN",
-        style: "currency",
-        minimumFractionDigits: 2,
-      }).format(precio),
+    accessorFn: ({ precio }) => BlockChain.currency(precio),
   },
   {
     accessorKey: "stock.cantidad",
@@ -51,16 +49,25 @@ export const Route = createFileRoute("/productos/")({
 });
 
 function Index() {
+  const handle = Dialogo.createHandle<Producto>();
   const { data } = useSuspenseQuery(productosQuery);
+
+  const handleDialog = (producto: Producto) => {
+    handle.openWithPayload(producto);
+  };
 
   return (
     <div className=" container px-10">
       <h3 className="text-2xl font-bold my-5">Productos </h3>
 
       <CustomTable
+        createUrl="/productos/new"
         columns={columns}
         data={data.productos}
+        deleteActionFunction={handleDialog}
       />
+
+      <DeleteProductModal handle={handle} />
     </div>
   );
 }

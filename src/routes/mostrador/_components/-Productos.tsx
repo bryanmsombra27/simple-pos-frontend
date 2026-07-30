@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "#components/ui/card";
 import { usecartStore } from "../../../store/cart";
+import { BlockChain } from "../../../lib/utils";
 
 interface ProductosProps {
   productos: Producto[];
@@ -45,12 +46,7 @@ const Productos: FC<ProductosProps> = ({ productos }) => {
             <CardContent>
               <p>En Almacen: {producto.stock.cantidad}</p>
               <p className="mt-5">
-                Precio:{" "}
-                {Intl.NumberFormat("es-MX", {
-                  currency: "MXN",
-                  style: "currency",
-                  minimumFractionDigits: 2,
-                }).format(producto.precio)}
+                Precio: {BlockChain.currency(producto.precio)}
               </p>
             </CardContent>
             <CardFooter>

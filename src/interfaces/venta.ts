@@ -20,3 +20,9 @@ export interface VentaResponse extends CommonResponse {
 export interface VentasFindAllResponse extends CommonFindAllResponse {
   ventas: Venta[];
 }
+
+export interface VentasEarningsResponse {
+  day: number;
+  week: number;
+  month: number;
+}

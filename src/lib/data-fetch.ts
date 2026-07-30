@@ -41,11 +41,6 @@ export async function makeApiRequest<T>(options: RequestOptions): Promise<T> {
     headers.append("Authorization", `Bearer ${token}`);
   }
 
-  //    const searchParams = new URLSearchParams();
-
-  //   if (pagination?.page) {
-  //     searchParams.append("page", pagination.page.toString());
-  //   }
   let partialUrl: string = "";
 
   if (searchParams) {
