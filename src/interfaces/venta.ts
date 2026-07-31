@@ -1,15 +1,17 @@
 import type { CommonFindAllResponse, CommonResponse } from "./common";
+import type { Producto } from "./producto";
 
-export type ProductoVendido = {
+export type VentaPorProducto = {
   precio: number;
   cantidad: number;
   producto_id: string;
+  producto?: Partial<Producto>;
 };
 
 export type Venta = {
   id: string;
   total: number;
-  productos: Pick<ProductoVendido, "producto_id" | "cantidad">[];
+  productos: Partial<VentaPorProducto>[];
   fecha: string;
 };
 

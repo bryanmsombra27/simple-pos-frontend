@@ -23,8 +23,6 @@ const useUpdateProduct = () => {
       await queryClient.setQueryData(
         ["producto", value.producto.id],
         (state: ProductoResponse) => {
-          console.log(value.producto, "PRODUCTO ACTUALIZADO ");
-
           return value.producto
             ? ({
                 ...state,

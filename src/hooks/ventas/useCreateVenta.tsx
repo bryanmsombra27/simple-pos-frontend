@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { createSaleAction } from "../../actions/ventas/ventas";
-import type { ProductoVendido } from "../../interfaces/venta";
+import type { VentaPorProducto } from "../../interfaces/venta";
 import type { ProductosFindAllResponse } from "../../interfaces/producto";
 import { getRouteApi } from "@tanstack/react-router";
 
 interface BodyMutation {
   productoIds: string[];
-  productos: ProductoVendido[];
+  productos: VentaPorProducto[];
 }
 
 const routeApi = getRouteApi("/mostrador/");
@@ -38,7 +38,7 @@ const useCreateVenta = () => {
                       ...p,
                       stock: {
                         cantidad:
-                          p.stock.cantidad - productoEncontrado.cantidad,
+                          p.stock.cantidad - productoEncontrado.cantidad!,
                       },
                     };
                   } else return p;

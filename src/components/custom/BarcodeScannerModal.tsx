@@ -41,7 +41,6 @@ const BarcodeScannerModal: FC<BarcodeScannerModalProps> = ({
   const [isMounted, setIsMounted] = useState<boolean>(false);
 
   const scanner = (barcode: DetectedBarcode[]) => {
-    console.log("Entra", barcode);
     if (barcode.length > 0) {
       setValue("codigo_barras", barcode[0].rawValue);
       setOpened(false);

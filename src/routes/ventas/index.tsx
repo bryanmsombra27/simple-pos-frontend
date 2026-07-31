@@ -7,6 +7,7 @@ import type { Venta } from "../../interfaces/venta";
 import { BlockChain } from "../../lib/utils";
 import useGetGanancias from "../../hooks/ventas/useGetGanancias";
 import { Skeleton } from "#components/ui/skeleton";
+import ProductoBySale from "./_components/-ProductoBySale";
 
 const ventasQuery = queryOptions({
   queryKey: ["ventas"],
@@ -17,12 +18,26 @@ const columns: ColumnDef<Omit<Venta, "productos">>[] = [
   {
     accessorKey: "id",
     enableHiding: true,
+    // cell: ({ row }) =>
+    //   row.getCanExpand() ? (
+    //     <button onClick={row.getToggleExpandedHandler()}>
+    //       {row.getIsExpanded() ? "Collapse" : "Expand"}
+    //     </button>
+    //   ) : null,
   },
 
   {
     accessorKey: "fecha",
     header: "Fecha",
-    cell: ({ row }) => BlockChain.date(row.original.fecha),
+    cell: ({ row }) =>
+      row.getCanExpand() ? (
+        <button onClick={row.getToggleExpandedHandler()}>
+          {/* {row.getIsExpanded() ? "Collapse" : "Expand"} */}
+          {BlockChain.date(row.original.fecha)}
+        </button>
+      ) : (
+        BlockChain.date(row.original.fecha)
+      ),
   },
 
   {
@@ -40,6 +55,11 @@ export const Route = createFileRoute("/ventas/")({
 function Ventas() {
   const { data } = useSuspenseQuery(ventasQuery);
   const { data: ganancias, error, isPending } = useGetGanancias();
+
+  const subRows = () => {};
+  const renderSubRows = (venta: Venta) => {
+    return <ProductoBySale id={venta.id} />;
+  };
 
   return (
     <>
@@ -80,7 +100,8 @@ function Ventas() {
         </div>
 
         <CustomTable
-          expandedRow
+          expandedRows={subRows}
+          renderExpandedRows={renderSubRows}
           columns={columns}
           showActions={false}
           data={data.ventas}

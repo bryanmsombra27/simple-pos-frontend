@@ -53,7 +53,6 @@ const Productos: FC<ProductosProps> = ({ productos }) => {
               <Button
                 className="w-full "
                 onClick={() => {
-                  console.log("Entra aqui", producto);
                   addProduct(producto);
                 }}
               >

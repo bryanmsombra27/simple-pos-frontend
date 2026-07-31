@@ -63,7 +63,6 @@ const ZxingBarcodeScannerModal: FC<BarcodeScannerModalProps> = ({
           height={500}
           formats={formats}
           onUpdate={(err, result: any) => {
-            console.log("ENTRa", result);
             if (result) setData(result.text);
             else setData("Not Found");
           }}

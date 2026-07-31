@@ -15,8 +15,6 @@ export class BlockChain {
   }
 
   static date(date: string) {
-    // const day = new Date(date).getDate();
-    // const dateFormat = new Date(date).setDate(day + 1);
     const dateFormat = new Date(date);
     return Intl.DateTimeFormat("es-MX", {
       day: "numeric",

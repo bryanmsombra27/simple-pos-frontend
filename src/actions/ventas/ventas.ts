@@ -1,7 +1,7 @@
 import { makeApiRequest } from "#lib/data-fetch";
 import type { Pagination } from "../../interfaces/common";
 import type {
-  ProductoVendido,
+  VentaPorProducto,
   VentaResponse,
   VentasEarningsResponse,
   VentasFindAllResponse,
@@ -9,7 +9,7 @@ import type {
 
 export const createSaleAction = async (
   productoIds: string[],
-  productos: ProductoVendido[],
+  productos: VentaPorProducto[],
 ): Promise<VentaResponse> => {
   const data = await makeApiRequest<VentaResponse>({
     url: "ordenes",
@@ -37,6 +37,16 @@ export const getSalesAction = async (
 export const getEarningsAction = async (): Promise<VentasEarningsResponse> => {
   const data = await makeApiRequest<VentasEarningsResponse>({
     url: "ordenes/earnings",
+  });
+
+  return data;
+};
+
+export const getProductsBySaleAction = async (
+  id: string,
+): Promise<VentaResponse> => {
+  const data = await makeApiRequest<VentaResponse>({
+    url: `ordenes/${id}`,
   });
 
   return data;

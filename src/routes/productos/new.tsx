@@ -1,6 +1,6 @@
 import { Button } from "#components/ui/button";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Barcode, Save, FileTextIcon, XIcon } from "lucide-react";
+import { Barcode, Save, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";

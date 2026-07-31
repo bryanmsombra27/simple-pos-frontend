@@ -1,6 +1,5 @@
 import {
   type ColumnDef,
-  type ExpandedState,
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
@@ -16,8 +15,14 @@ import {
 } from "#components/ui/table";
 import { Button } from "#components/ui/button";
 import { Link } from "@tanstack/react-router";
-import { BackpackIcon, EditIcon, Trash2Icon } from "lucide-react";
-import { useState } from "react";
+import {
+  ArrowDownCircle,
+  ArrowUpCircle,
+  BackpackIcon,
+  EditIcon,
+  Trash2Icon,
+} from "lucide-react";
+import type { ReactNode } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -27,7 +32,8 @@ interface DataTableProps<TData, TValue> {
   showEdit?: boolean;
   showDelete?: boolean;
   deleteActionFunction?: (value: any) => void;
-  expandedRow?: boolean;
+  expandedRows?: (value: any) => void;
+  renderExpandedRows?: (value?: any) => any;
 }
 
 export function CustomTable<TData, TValue>({
@@ -38,9 +44,10 @@ export function CustomTable<TData, TValue>({
   showEdit = true,
   showDelete = true,
   deleteActionFunction,
-  expandedRow = false,
+  expandedRows = undefined,
+  renderExpandedRows = undefined,
 }: DataTableProps<TData, TValue>) {
-  const [expanded, setExpanded] = useState<ExpandedState>({});
+  // const [expanded, setExpanded] = useState<ExpandedState>({});
 
   const table = useReactTable({
     data,
@@ -49,11 +56,14 @@ export function CustomTable<TData, TValue>({
       columnVisibility: {
         id: false,
       },
-      expanded,
+      // expanded,
     },
-    onExpandedChange: setExpanded,
+    // onExpandedChange: setExpanded,
     getCoreRowModel: getCoreRowModel(),
-    getExpandedRowModel: expandedRow ? getExpandedRowModel() : undefined,
+    getExpandedRowModel:
+      expandedRows && renderExpandedRows ? getExpandedRowModel() : undefined,
+    // getExpandedRowModel: getExpandedRowModel(),
+    // getSubRows: (row) => [],
   });
 
   return (
@@ -74,6 +84,8 @@ export function CustomTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
+                {expandedRows && <TableHead></TableHead>}
+
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -98,6 +110,25 @@ export function CustomTable<TData, TValue>({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                   >
+                    {expandedRows && (
+                      <TableCell>
+                        {row.getIsExpanded() ? (
+                          <ArrowUpCircle
+                            className="cursor-pointer"
+                            onClick={() => row.toggleExpanded(false)}
+                          />
+                        ) : (
+                          <ArrowDownCircle
+                            className="cursor-pointer"
+                            onClick={() => {
+                              row.toggleExpanded(true);
+                              expandedRows(row.original);
+                            }}
+                          />
+                        )}
+                      </TableCell>
+                    )}
+
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
                         {flexRender(
@@ -137,10 +168,7 @@ export function CustomTable<TData, TValue>({
                   {row.getIsExpanded() && (
                     <tr>
                       <td colSpan={row.getAllCells().length}>
-                        {" "}
-                        // The number of columns you wish to span for the
-                        expanded data if it is not a row that shares the same
-                        columns as the parent row // Your custom UI goes here
+                        {renderExpandedRows && renderExpandedRows(row.original)}
                       </td>
                     </tr>
                   )}

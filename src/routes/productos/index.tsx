@@ -1,5 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { getProductsAction } from "../../actions/productos/productos";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Producto } from "../../interfaces/producto";
@@ -17,7 +17,7 @@ const columns: ColumnDef<Producto>[] = [
   { accessorKey: "id", header: "Id", enableHiding: true },
   {
     accessorKey: "imagen",
-    cell: ({ cell, row }) => {
+    cell: ({ row }) => {
       return (
         <img
           className="rounded-3xl"

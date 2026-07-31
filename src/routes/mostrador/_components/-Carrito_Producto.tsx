@@ -11,7 +11,7 @@ import { Minus, Plus, XIcon } from "lucide-react";
 import { usecartStore } from "../../../store/cart";
 import { useShallow } from "zustand/react/shallow";
 import { Button } from "#components/ui/button";
-import type { ProductoVendido } from "../../../interfaces/venta";
+import type { VentaPorProducto } from "../../../interfaces/venta";
 import useCreateVenta from "../../../hooks/ventas/useCreateVenta";
 import { BlockChain } from "../../../lib/utils";
 
@@ -32,7 +32,7 @@ const CarritoProducto: FC<CarritoProductoProps> = ({}) => {
     0,
   );
   const crearOrden = async () => {
-    const productosOrden: ProductoVendido[] = [];
+    const productosOrden: VentaPorProducto[] = [];
     const productoIds: string[] = [];
     for (const producto of productos) {
       productoIds.push(producto.id);
