@@ -31,6 +31,7 @@ import {
 } from "#components/ui/drawer";
 import CarritoProducto from "./_components/-Carrito_Producto";
 import useGetProduct from "../../hooks/productos/useGetProduct";
+import PageError from "../../components/custom/PageError";
 
 type SearchingParams = {
   page: number;
@@ -70,6 +71,7 @@ export const Route = createFileRoute("/mostrador/")({
   loader: ({ context, deps }) => {
     return context.queryClient.ensureQueryData(productosQueryOptions(deps));
   },
+  errorComponent: PageError,
 });
 
 function Mostrador() {

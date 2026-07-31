@@ -7,6 +7,7 @@ import { CustomTable } from "#components/custom/CustomTable";
 import { BlockChain } from "../../lib/utils";
 import { Dialog as Dialogo } from "@base-ui/react/dialog";
 import DeleteProductModal from "./_components/-DeleteProductModal";
+import PageError from "../../components/custom/PageError";
 
 const productosQuery = queryOptions({
   queryKey: ["productos"],
@@ -46,6 +47,7 @@ const columns: ColumnDef<Producto>[] = [
 export const Route = createFileRoute("/productos/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(productosQuery),
   component: Index,
+  errorComponent: PageError,
 });
 
 function Index() {

@@ -8,6 +8,7 @@ import { BlockChain } from "../../lib/utils";
 import useGetGanancias from "../../hooks/ventas/useGetGanancias";
 import { Skeleton } from "#components/ui/skeleton";
 import ProductoBySale from "./_components/-ProductoBySale";
+import PageError from "../../components/custom/PageError";
 
 const ventasQuery = queryOptions({
   queryKey: ["ventas"],
@@ -50,6 +51,7 @@ const columns: ColumnDef<Omit<Venta, "productos">>[] = [
 export const Route = createFileRoute("/ventas/")({
   component: Ventas,
   loader: ({ context }) => context.queryClient.ensureQueryData(ventasQuery),
+  errorComponent: PageError,
 });
 
 function Ventas() {
