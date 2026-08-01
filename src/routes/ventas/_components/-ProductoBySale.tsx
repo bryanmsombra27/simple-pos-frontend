@@ -14,7 +14,7 @@ const ProductoBySale: FC<ProductoBySaleProps> = ({ id }) => {
 
   if (isPending)
     return (
-      <div className="grid grid-cols-4 p-10 items-center">
+      <div className="grid grid-col-1 justify-center md:grid-cols-4 p-10 items-center gap-3">
         <Skeleton className="w-40 h-40" />
         <Skeleton className="w-60 h-2" />
         <Skeleton className="w-60 h-2" />
@@ -31,9 +31,10 @@ const ProductoBySale: FC<ProductoBySaleProps> = ({ id }) => {
       </h1>
 
       {venta?.productos.map((producto) => (
-        <div className="grid grid-cols-4 p-10 items-center">
+        <div className="grid grid-cols-1 justify-center md:grid-cols-4 p-10 items-center text-center">
           <img
             width={150}
+            className="mx-auto"
             src={producto.producto?.imagen}
             alt={producto.producto?.nombre}
           />

@@ -128,7 +128,7 @@ function Mostrador() {
 
   return (
     <div className="p-10">
-      <div className="flex gap-5 items-center w-full justify-center my-10">
+      <div className="flex flex-col space-y-5 md:flex-row md:space-y-0 gap-5 items-center w-full justify-center my-10">
         <div className="h-32 w-28">
           {data && (
             <BarcodeScanner

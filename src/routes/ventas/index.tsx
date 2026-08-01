@@ -68,7 +68,7 @@ function Ventas() {
       <div className=" container px-10">
         <h3 className="text-2xl font-bold my-5">Ventas </h3>
 
-        <div className="flex gap-5 mb-10 justify-center items-center">
+        <div className="flex flex-col md:flex-row gap-5 mb-10 justify-center items-center">
           {isPending ? (
             <>
               <Skeleton className="w-3xs h-32" />
@@ -78,7 +78,7 @@ function Ventas() {
           ) : error ? (
             <p>No fue posible mostrar las ganancias</p>
           ) : (
-            <>
+            <div className="flex flex-col gap-5 md:flex-row">
               <div className="rounded-2xl p-4 flex flex-col gap-4 shadow-md text-center">
                 <span className="font-semibold text-2xl">
                   {BlockChain.currency(ganancias!.day)}
@@ -97,7 +97,7 @@ function Ventas() {
                 </span>
                 <h4>Ganancias del mes</h4>
               </div>
-            </>
+            </div>
           )}
         </div>
 

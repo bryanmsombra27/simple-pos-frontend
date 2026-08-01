@@ -1,11 +1,9 @@
 import type { FC } from "react";
 import type { Producto } from "../../../interfaces/producto";
 
-import { Badge } from "#components/ui/badge";
 import { Button } from "#components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -23,22 +21,19 @@ const Productos: FC<ProductosProps> = ({ productos }) => {
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
         {productos.map((producto) => (
           <Card
             className="relative mx-auto w-full max-w-sm pt-0 flex flex-col justify-between"
             key={producto.id}
           >
-            <div className="absolute inset-0 z-30 aspect-video " />
+            <div className="absolute inset-0 z-30  " />
             <img
               src={producto.imagen!}
               alt="Event cover"
-              className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
+              className="relative z-20 w-full object-cover "
             />
             <CardHeader>
-              <CardAction>
-                <Badge variant="secondary">Featured</Badge>
-              </CardAction>
               <CardTitle>{producto.nombre}</CardTitle>
               <CardDescription>{producto.descripcion}</CardDescription>
             </CardHeader>

@@ -107,7 +107,7 @@ function Productos() {
   return (
     <>
       <div className="container px-10 py-5">
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex flex-col space-y-5 md:space-y-0 md:flex-row  justify-between items-center mb-10">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -134,7 +134,7 @@ function Productos() {
         </div>
 
         {/* <h1 className="text-2xl font-bold my-10"> Nuevo Producto</h1> */}
-        <div className="flex gap-10">
+        <div className="flex flex-col md:flex-row  gap-10">
           <form
             className=" p-5 rounded-2xl shadow-lg  grow "
             encType="multipart/form-data"
@@ -142,7 +142,7 @@ function Productos() {
             <h3 className="text-lg font-semibold my-5">
               Información del Producto
             </h3>
-            <div className="grid grid-cols-2 gap-10 col-span-2">
+            <div className="md:grid md:grid-cols-2 gap-5 p-5 md:gap-10 md:p-10 ">
               <FieldGroup className="m-2">
                 <Field>
                   <FieldLabel htmlFor="nombre">Nombre del Producto</FieldLabel>
@@ -249,7 +249,7 @@ function Productos() {
             {file && (
               <Attachment
                 orientation="vertical"
-                className="w-full mt-5"
+                className="w-auto md:w-70 mx-auto mt-5"
               >
                 <AttachmentMedia variant="image">
                   <img
@@ -258,12 +258,15 @@ function Productos() {
                     className="object-cover bg-center"
                   />
                 </AttachmentMedia>
-                <AttachmentContent>
-                  <AttachmentTitle>{file?.name}</AttachmentTitle>
-                  <AttachmentDescription>
-                    {file?.type} · {file && file.size / 1024} MB
-                  </AttachmentDescription>
-                </AttachmentContent>
+                {file && (
+                  <AttachmentContent>
+                    <AttachmentTitle>{file?.name}</AttachmentTitle>
+                    <AttachmentDescription>
+                      {file?.type} · {file && file.size / 1024} MB
+                    </AttachmentDescription>
+                  </AttachmentContent>
+                )}
+
                 <AttachmentActions>
                   <AttachmentAction
                     aria-label="Remove sales-dashboard.pdf"

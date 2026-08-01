@@ -106,7 +106,7 @@ const CarritoProducto: FC<CarritoProductoProps> = ({}) => {
           </div>
 
           <Button
-            className=""
+            className="w-60 md:w-full mx-auto"
             disabled={productos.length == 0 || isPending}
             onClick={crearOrden}
           >

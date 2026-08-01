@@ -136,6 +136,7 @@
 
 .file-upload {
   height: 120px !important;
+  min-width: 60px !important;
   display: flex;
   flex-direction: column;
   gap: 15px;
