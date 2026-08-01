@@ -1,15 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { createProductAction } from "../../actions/productos/productos";
-import type {
-  ProductoForm,
-  ProductosFindAllResponse,
-} from "../../interfaces/producto";
-
-type BodyMutation = {
-  producto: ProductoForm;
-  file: File | undefined;
-};
+import type { ProductosFindAllResponse } from "../../interfaces/producto";
 
 const useCreateProduct = () => {
   const queryClient = useQueryClient();

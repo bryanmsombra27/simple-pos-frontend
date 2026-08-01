@@ -1,14 +1,12 @@
-import { useEffect, useRef, useState, type FC } from "react";
+import { type FC } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "#components/ui/dialog";
-import { Barcode, XCircle } from "lucide-react";
-import { Input } from "#components/ui/input";
+import { XCircle } from "lucide-react";
 import {
   BarcodeFormat,
   BarcodeScanner,
@@ -38,8 +36,6 @@ const BarcodeScannerModal: FC<BarcodeScannerModalProps> = ({
   opened,
   setOpened,
 }) => {
-  const [isMounted, setIsMounted] = useState<boolean>(false);
-
   const scanner = (barcode: DetectedBarcode[]) => {
     if (barcode.length > 0) {
       setValue("codigo_barras", barcode[0].rawValue);
