@@ -22,7 +22,6 @@ import {
   EditIcon,
   Trash2Icon,
 } from "lucide-react";
-import type { ReactNode } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
